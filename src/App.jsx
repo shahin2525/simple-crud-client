@@ -20,7 +20,10 @@ function App() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        // if(data.inser)
+        if (data.insertedId) {
+          alert("data added successfully");
+          form.reset();
+        }
       });
   };
   return (
