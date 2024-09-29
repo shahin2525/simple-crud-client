@@ -1,7 +1,9 @@
-import { useLoaderData } from "react-router-dom";
+import { useState } from "react";
+import { Link, useLoaderData } from "react-router-dom";
 
 const Users = () => {
-  const users = useLoaderData();
+  const loadUsers = useLoaderData();
+  const [users, setUsers] = useState(loadUsers);
   const handleDelete = (id) => {
     fetch(`http://localhost:5000/users/${id}`, {
       method: "DELETE",
@@ -9,6 +11,10 @@ const Users = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
+        if (data.deletedCount) {
+          const remainUsers = users.filter((user) => user._id !== id);
+          setUsers(remainUsers);
+        }
       });
   };
   return (
@@ -20,6 +26,7 @@ const Users = () => {
         <p key={user._id}>
           {" "}
           {user.name} {user.email}{" "}
+          <Link to={`/users/${user._id}`}>Update user</Link>
           <button onClick={() => handleDelete(user._id)}>x</button>
         </p>
       ))}
